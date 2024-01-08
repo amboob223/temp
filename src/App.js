@@ -240,6 +240,9 @@ function App() {
 
   return (
     <div className="App">
+      <div id="outC">
+      <div id='inC'>
+
       <button
       onClick={connectMetamask}
       
@@ -254,15 +257,15 @@ function App() {
       <input
         value={review}
         onChange={(e)=>setReview(e.target.value)}
-      />
+        />
       <button onClick={write}>
         write
       </button>
 
       <button 
         onClick={read}
-
-      >
+        
+        >
         read
       </button>
  <table>
@@ -281,6 +284,8 @@ function App() {
       </table>
   
 
+</div>
+          </div>
     </div>
   );
 }
