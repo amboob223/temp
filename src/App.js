@@ -6,10 +6,12 @@ import "./App.css";
 function App() {
 
     //first thing we need to do is establish the states
-    const [connectedAddress,setConnectedAddress] = useState(null)
+    const [connectedAddress,setConnectedAddress] = useState("")
     const [review,setReview] = useState("");
     const [newReview,setNewReview] = useState([]);// we had to change the type 
+    // const [allAddresses,setAllAddresses] = useState([]);
 
+    
     const connectMetamask = async() =>{
       const accounts = await window.ethereum.request({method:"eth_requestAccounts"});
       const account = accounts[0] // this is my account
@@ -17,11 +19,16 @@ function App() {
     }
 
     const write = async()=>{
-      const provider =new ethers.JsonRpcProvider("https://sepolia.infura.io/v3/b91ba8958d0f40609214cd29e0f4bba3")
-      const contractAddress = "0x218C0CE3023316A35F020AD814024e01536800B5"
+      const provider =new ethers.JsonRpcProvider("https://sepolia.infura.io/v3/b91ba8958d0f40609214cd29e0f4bba3") // because we using seporia eth we use the injected provider with this type of network provider
+      const contractAddress = "0xF2eF0441C602607b892b4F6c75f612d0420C4552"
       const ERC20_abi = [
 	{
 		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_address",
+				"type": "address"
+			},
 			{
 				"internalType": "string",
 				"name": "_review",
@@ -34,13 +41,19 @@ function App() {
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "getAll",
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "addresses",
 		"outputs": [
 			{
-				"internalType": "string[]",
+				"internalType": "address",
 				"name": "",
-				"type": "string[]"
+				"type": "address"
 			}
 		],
 		"stateMutability": "view",
@@ -48,12 +61,31 @@ function App() {
 	},
 	{
 		"inputs": [],
-		"name": "owner",
+		"name": "getAll",
 		"outputs": [
 			{
-				"internalType": "address",
+				"internalType": "address[]",
 				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_address",
 				"type": "address"
+			}
+		],
+		"name": "getAllReviews",
+		"outputs": [
+			{
+				"internalType": "string[]",
+				"name": "",
+				"type": "string[]"
 			}
 		],
 		"stateMutability": "view",
@@ -73,43 +105,6 @@ function App() {
 				"internalType": "address",
 				"name": "reviewer",
 				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "review",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "reviewId",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "reviews",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
 			}
 		],
 		"stateMutability": "view",
@@ -121,7 +116,7 @@ function App() {
       const contract = new ethers.Contract(contractAddress,ERC20_abi,wallet)
 
                       //tranasction 
-                    const tx = await contract.addReview(review)
+                    const tx = await contract.addReview(connectedAddress,review)
                          await tx.wait()
                         console.log(tx)            
     }
@@ -129,10 +124,15 @@ function App() {
 
     const read = async()=>{
       const provider = new ethers.JsonRpcProvider("https://sepolia.infura.io/v3/b91ba8958d0f40609214cd29e0f4bba3")
-      const contractAddress = "0x218C0CE3023316A35F020AD814024e01536800B5"
+      const contractAddress = "0xF2eF0441C602607b892b4F6c75f612d0420C4552"
       const ERC20_abi = [
 	{
 		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_address",
+				"type": "address"
+			},
 			{
 				"internalType": "string",
 				"name": "_review",
@@ -145,13 +145,19 @@ function App() {
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "getAll",
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "addresses",
 		"outputs": [
 			{
-				"internalType": "string[]",
+				"internalType": "address",
 				"name": "",
-				"type": "string[]"
+				"type": "address"
 			}
 		],
 		"stateMutability": "view",
@@ -159,12 +165,31 @@ function App() {
 	},
 	{
 		"inputs": [],
-		"name": "owner",
+		"name": "getAll",
 		"outputs": [
 			{
-				"internalType": "address",
+				"internalType": "address[]",
 				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_address",
 				"type": "address"
+			}
+		],
+		"name": "getAllReviews",
+		"outputs": [
+			{
+				"internalType": "string[]",
+				"name": "",
+				"type": "string[]"
 			}
 		],
 		"stateMutability": "view",
@@ -184,43 +209,6 @@ function App() {
 				"internalType": "address",
 				"name": "reviewer",
 				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "review",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "reviewId",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "reviews",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
 			}
 		],
 		"stateMutability": "view",
@@ -229,10 +217,10 @@ function App() {
 ]
 
       const contract = new ethers.Contract(contractAddress,ERC20_abi,provider)
-      const result = await contract.getAll();
+      const result = await contract.getAllReviews(connectedAddress);
       const newResult = result.toString().split(",") // the . to string works on an object
                       setNewReview(newResult)
-
+console.log(newResult)
           
 
     }
