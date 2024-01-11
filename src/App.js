@@ -370,8 +370,9 @@ console.log(newResult)
       ]
       const contract = new ethers.Contract(contractAddress,ERC20_abi,provider)
        const rray =  await contract.getAll();
-                console.log(rray)
-             setAllAddresses(rray)
+                console.log([...new Set(rray)])
+				
+             setAllAddresses([...new Set(rray)])
        
          
              setnowindex((previndex)=>{
